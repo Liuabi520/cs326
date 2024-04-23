@@ -19,7 +19,11 @@ def get_float64_column_names(df: pd.DataFrame) -> list[str]:
         List of strings with the float64 column names.
     """
     
-    raise NotImplementedError("You need to implement this function.")
+    ans = []
+    for column in df.columns:
+        if df[column].dtype == 'float64':
+            ans.append(column)
+    return ans
 
 def get_missing_value_indices(df: pd.DataFrame, column: str) -> list[int]:
     """Get the row indices of missing values within a column.
@@ -38,7 +42,9 @@ def get_missing_value_indices(df: pd.DataFrame, column: str) -> list[int]:
         Indices of missing values, as a list of ints.
     """
 
-    raise NotImplementedError("You need to implement this function.")
+    data = df[column]
+    data = data[data.isnull()]
+    return data.index.tolist()
 
 def drop_missing_values(df: pd.DataFrame) -> pd.DataFrame:
     """Drop rows with missing values.
@@ -53,8 +59,8 @@ def drop_missing_values(df: pd.DataFrame) -> pd.DataFrame:
         DataFrame with missing values dropped.
     """
 
-    raise NotImplementedError("You need to implement this function.")
-
+    df = df.dropna()
+    return df
 def fill_float64_cols_with_random_sample(df: pd.DataFrame, random_state=2024) -> pd.DataFrame:
     """Fill float64 columns with a random sample from the column.
     
@@ -118,7 +124,10 @@ def calculate_covariance_numpy(x: np.array, y: np.array) -> float:
         Covariance between x and y.
     """
 
-    raise NotImplementedError("You need to implement this function.")
+    n = len(x)
+    mean_x = np.mean(x)
+    mean_y = np.mean(y)
+    return np.sum((x - mean_x) * (y - mean_y)) / n
 
 def calculate_pearson_correlation_numpy(x: np.array, y: np.array) -> float:
     """Use only numpy to calculate pearson's correlation coefficient.
@@ -134,7 +143,11 @@ def calculate_pearson_correlation_numpy(x: np.array, y: np.array) -> float:
         Pearson's correlation coefficient between x and y.
     """
 
-    raise NotImplementedError("You need to implement this function.")
+    mean_x = np.mean(x)
+    mean_y = np.mean(y)
+    top = np.sum((x - mean_x) * (y - mean_y))
+    bottom = np.sqrt(np.sum((x - mean_x) ** 2) * np.sum((y - mean_y) ** 2))
+    return top / bottom
 
 def calculate_pearson_correlation_scipy(x: np.array, y: np.array) -> float:
     """Use scipy to calculate pearson's correlation coefficient.
@@ -150,7 +163,8 @@ def calculate_pearson_correlation_scipy(x: np.array, y: np.array) -> float:
         Pearson's correlation coefficient between x and y.
     """
 
-    raise NotImplementedError("You need to implement this function.")
+    corr = scipy.stats.pearsonr(x, y)
+    return corr[0]
 
 def calculate_spearman_correlation_scipy(x: np.array, y: np.array) -> float:
     """Use scipy to calculate spearman's correlation coefficient.
@@ -167,7 +181,8 @@ def calculate_spearman_correlation_scipy(x: np.array, y: np.array) -> float:
     
     """
     
-    raise NotImplementedError("You need to implement this function.")
+    corr = scipy.stats.spearmanr(x, y)
+    return corr.statistic
 
 def perform_independent_t_test(x: np.array, y: np.array) -> tuple[float, float]:
     """Use scipy to calculate independent t-test.
@@ -183,7 +198,7 @@ def perform_independent_t_test(x: np.array, y: np.array) -> tuple[float, float]:
         Test statistic and p-value (float, float) from the independent t-test.
     """
     
-    raise NotImplementedError("You need to implement this function.")
+    return scipy.stats.ttest_ind(x, y)
 
 def check_normality(x: np.array) -> tuple[float, float]:
     """Check if a sample is normally distributed using Shapiro-Wilk test.
@@ -198,7 +213,7 @@ def check_normality(x: np.array) -> tuple[float, float]:
         Test statistic and p-value (float, float)from the Shapiro-Wilk test.
     """
 
-    raise NotImplementedError("You need to implement this function.")
+    return scipy.stats.shapiro(x)
 
 def check_variance_homogeneity(x: np.array, y: np.array) -> tuple[float, float]:
     """Check if two samples have equal variance using Levene's test.
@@ -214,4 +229,4 @@ def check_variance_homogeneity(x: np.array, y: np.array) -> tuple[float, float]:
         Test statistic and p-value (float, float) from the Levene's test.
     """
 
-    raise NotImplementedError("You need to implement this function.")
+    return scipy.stats.levene(x, y)
